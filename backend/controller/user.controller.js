@@ -29,7 +29,16 @@ const registerUser = async (req, res) => {
         });
 
         console.log("User created successfully:", newUser._id);
-        return res.status(201).json({ message: "User registered successfully" })
+        const token = jwt.sign(
+            { id: newUser._id, email: newUser.email },
+            process.env.TOKEN_SECRET,
+            { expiresIn: "1d" }
+        );
+        return res.status(201).json({
+            message: "User registered successfully",
+            token,
+            user: { username: newUser.username, email: newUser.email }
+        })
 
     } catch (error) {
         console.error("Registration error details:", error);

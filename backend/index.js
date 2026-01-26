@@ -11,8 +11,7 @@ const { PositionsModel } = require("./model/PositionsModel");
 const { OrdersModel } = require("./model/OrdersModel");
 const userController = require("./controller/user.controller");
 
-const PORT = process.env.PORT || 3002;
-const uri = process.env.MONGO_URL;
+const PORT = process.env.PORT || 4000;
 
 const app = express();
 
