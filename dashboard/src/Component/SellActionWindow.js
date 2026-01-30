@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
+import React, { useState, useContext } from "react";
 import axios from "axios";
 
 import GeneralContext from "./GeneralContext";
@@ -11,19 +9,21 @@ const SellActionWindow = ({ uid }) => {
     const [stockQuantity, setStockQuantity] = useState(1);
     const [stockPrice, setStockPrice] = useState(0.0);
 
-    const handleBuyClick = () => {
+    const { closeSellWindow } = useContext(GeneralContext);
+
+    const handleSellClick = () => {
         axios.post("http://localhost:4000/newOrder", {
             name: uid,
             qty: stockQuantity,
             price: stockPrice,
-            mode: "Sell",
+            mode: "SELL",
         });
 
-        GeneralContext.closeSellWindow();
+        closeSellWindow();
     };
 
     const handleCancelClick = () => {
-        GeneralContext.closeSellWindow();
+        closeSellWindow();
     };
 
     return (
@@ -57,12 +57,12 @@ const SellActionWindow = ({ uid }) => {
             <div className="buttons">
                 <span>Margin required ₹140.65</span>
                 <div>
-                    <Link className="btn btn-blue" onClick={handleBuyClick} style={{ backgroundColor: "red" }}>
+                    <button className="btn btn-blue" onClick={handleSellClick} style={{ backgroundColor: "red" }}>
                         Sell
-                    </Link>
-                    <Link to="" className="btn btn-grey" onClick={handleCancelClick}>
+                    </button>
+                    <button className="btn btn-grey" onClick={handleCancelClick}>
                         Cancel
-                    </Link>
+                    </button>
                 </div>
             </div>
         </div>

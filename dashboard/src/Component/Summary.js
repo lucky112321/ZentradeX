@@ -1,6 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Summary = () => {
+  const [allHoldings, setAllHoldings] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:4000/allHoldings").then((res) => {
+      setAllHoldings(res.data);
+    });
+  }, []);
+
+  const totalInvestment = allHoldings.reduce((acc, stock) => acc + (stock.avg * stock.qty), 0);
+  const currentValue = allHoldings.reduce((acc, stock) => acc + (stock.price * stock.qty), 0);
+  const totalPL = currentValue - totalInvestment;
+  const plPercentage = totalInvestment !== 0 ? ((totalPL / totalInvestment) * 100).toFixed(2) : 0;
+
   return (
     <>
       <div className="username">
@@ -34,13 +48,13 @@ const Summary = () => {
 
       <div className="section">
         <span>
-          <p>Holdings (13)</p>
+          <p>Holdings ({allHoldings.length})</p>
         </span>
 
         <div className="data">
           <div className="first">
-            <h3 className="profit">
-              1.55k <small>+5.20%</small>{" "}
+            <h3 className={totalPL >= 0 ? "profit" : "loss"}>
+              {(totalPL / 1000).toFixed(2)}k <small>{plPercentage}%</small>{" "}
             </h3>
             <p>P&L</p>
           </div>
@@ -48,10 +62,10 @@ const Summary = () => {
 
           <div className="second">
             <p>
-              Current Value <span>31.43k</span>{" "}
+              Current Value <span>{(currentValue / 1000).toFixed(2)}k</span>{" "}
             </p>
             <p>
-              Investment <span>29.88k</span>{" "}
+              Investment <span>{(totalInvestment / 1000).toFixed(2)}k</span>{" "}
             </p>
           </div>
         </div>

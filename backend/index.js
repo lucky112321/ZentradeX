@@ -131,7 +131,8 @@ app.get("/addHoldings", async (req, res) => {
         },
     ];
 
-    tempHoldings.forEach((item) => {
+    await HoldingsModel.deleteMany({});
+    await Promise.all(tempHoldings.map((item) => {
         let newHolding = new HoldingsModel({
             name: item.name,
             qty: item.qty,
@@ -140,10 +141,9 @@ app.get("/addHoldings", async (req, res) => {
             net: item.day,
             day: item.day,
         });
-
-        newHolding.save();
-    });
-    res.send("Done!");
+        return newHolding.save();
+    }));
+    res.send("Holdings Seeded!");
 });
 
 app.get("/addPositions", async (req, res) => {
@@ -170,7 +170,8 @@ app.get("/addPositions", async (req, res) => {
         },
     ];
 
-    tempPositions.forEach((item) => {
+    await PositionsModel.deleteMany({});
+    await Promise.all(tempPositions.map((item) => {
         let newPosition = new PositionsModel({
             product: item.product,
             name: item.name,
@@ -181,10 +182,9 @@ app.get("/addPositions", async (req, res) => {
             day: item.day,
             isLoss: item.isLoss,
         });
-
-        newPosition.save();
-    });
-    res.send("Done!");
+        return newPosition.save();
+    }));
+    res.send("Positions Seeded!");
 });
 
 app.get("/allHoldings", async (req, res) => {
@@ -209,6 +209,13 @@ app.post("/newOrder", async (req, res) => {
 
     res.send("Order saved!");
 });
+
+app.get("/allOrders", async (req, res) => {
+    let allOrders = await OrdersModel.find({});
+    res.json(allOrders);
+});
+
+
 
 app.post("/signup", userController.registerUser);
 app.post("/login", userController.loginUser);

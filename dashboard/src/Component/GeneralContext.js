@@ -18,14 +18,12 @@ export const GeneralContextProvider = (props) => {
 
   const handleOpenBuyWindow = (uid) => {
     setIsBuyWindowOpen(true);
-
-
+    setSelectedStockUID(uid);
   };
 
   const handleCloseBuyWindow = () => {
     setIsBuyWindowOpen(false);
-    setSelectedStockUID("")
-      ;
+    setSelectedStockUID("");
   };
 
   const handleOpenSellWindow = (uid) => {
@@ -34,11 +32,8 @@ export const GeneralContextProvider = (props) => {
   };
   const handleCloseSellWindow = () => {
     setIsSellWindowOpen(false);
-    setSelectedStockUID("")
-
-  }
-
-
+    setSelectedStockUID("");
+  };
 
   return (
     <GeneralContext.Provider
@@ -48,7 +43,6 @@ export const GeneralContextProvider = (props) => {
         openSellWindow: handleOpenSellWindow,
         closeSellWindow: handleCloseSellWindow,
       }}
-
     >
       {props.children}
       {isBuyWindowOpen && <BuyActionWindow uid={selectedStockUID} />}
